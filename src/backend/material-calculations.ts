@@ -11,31 +11,41 @@ export type MetalElement = {
 }
 
 const mixturesToAdd = (desiredGrade: Grade, currentGrade: Grade) => {
-const materialAdditions = desiredGrade.elements.map(desiredElement => {
+    //Generate list of instructions, if error is found, it is included in list
+    const materialAdditions = desiredGrade.elements.map(desiredElement => {
     
-    const desiredWeight = (elementalWeight(desiredElement, desiredGrade.weight))
+        const desiredWeight = (elementalWeight(desiredElement, desiredGrade.weight))
+        
+        const currElement = currentGrade.elements.find(e => e.name === desiredElement.name)
+        
+        // If element is not found, then return weigth of desired
+        if(!currElement) return {name: desiredElement.name, neededWeight: desiredWeight}
+
+        const currentWeight = elementalWeight(currElement, currentGrade.weight)
+        
+        const neededWeight = desiredWeight - currentWeight
+
+        // If the weight needed is negative, then the solution contians too much of that element
+        if(neededWeight < 0) return {error: `Mixture not possible, solution oversaturated with ${-1 * neededWeight}lbs ${currElement.name}`}
+
+        return {
+            name: desiredElement.name,
+            neededWeight
+        }
+    })
+    //Checks for elements that are included in current mixture but are not needed in desired
+    const unmatchedElements = currentGrade.elements.filter(c => 
+        //Checks to see if a grade's name in the current mixture is not found in desired
+        !desiredGrade.elements.map(e => e.name).includes(c.name)
+    )
     
-    const currElement = currentGrade.elements.find(e => e.name === desiredElement.name)
-    
-    // If element is not found, then return weigth of desired
-    if(!currElement) return {name: desiredElement.name, neededWeight: desiredWeight}
+    //Generate list of errors
+    const unmatchedErrors = unmatchedElements.map(unmatched => (
+        //Generates error object
+        {error: `Current mixture contains ${(unmatched.percentage / 100) * currentGrade.weight}lbs of ${unmatched.name} and is not needed. Solution Invalid`})
+    )
 
-    const currentWeight = elementalWeight(currElement, currentGrade.weight)
-    
-    const neededWeight = desiredWeight - currentWeight
-
-    // If the weight needed is negative, then the solution contians too much of that element
-    if(neededWeight < 0) return {error: `Mixture not possible, solution oversaturated with ${-1 * neededWeight}lbs ${currElement.name}`}
-
-    return {
-        name: desiredElement.name,
-        neededWeight
-    }
-})
-const unmatchedElements = currentGrade.elements.filter(c => !desiredGrade.elements.map(e => e.name).includes(c.name))
-const unmatchedErrors = unmatchedElements.map(unmatched => ({error: `Current mixture contains ${(unmatched.percentage / 100) * currentGrade.weight}lbs of ${unmatched.name} and is not needed. Solution Invalid`}))
-
-return [...materialAdditions, ...unmatchedErrors]
+    return [...materialAdditions, ...unmatchedErrors]
 }
 
 
