@@ -2,16 +2,21 @@ import { Grade } from "../backend/material-calculations"
 
 interface Props {
     grade: Grade,
-    updatePercentage: (newPercentage: number, name: string) => void;
+    updatePercentage: (newPercentage: number, name: string) => void,
+    updateWeight: (mixture: "current" | "desired", weight: number) => void
+
 }
 
-const ElementTable = ({grade, updatePercentage}: Props) => {
+const ElementTable = ({grade, updatePercentage, updateWeight}: Props) => {
     const totalPercentage = grade.elements.map(e => e.percentage).reduce((prev, curr) => prev + curr)
 
     return (
     <div className="card">
         <div className="card-header">
-    {grade.name}: {grade.weight} lbs
+    {grade.name}: 
+    <input 
+        value={grade.weight} 
+        onChange={(event) => updateWeight(grade.name ,parseFloat(event.target.value))} type="number" className="form-control" placeholder={`${grade.weight}`}/> lbs
   </div>
     <div className="card-body">
         <table className="table">

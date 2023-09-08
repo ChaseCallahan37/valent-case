@@ -1,5 +1,5 @@
 export type Grade = {
-    name: string
+    name: "desired" | "current"
     qualityNumber: number,
     weight: number,
     elements: MetalElement[]

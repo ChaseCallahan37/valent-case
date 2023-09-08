@@ -7,11 +7,11 @@ import OutputTable from './components/OutputTable'
 
 
 function App() {
-  const [currentMixture, setCurrentMixture] = useState(currentMixtureDefault())
-  const [desiredMixture, setDesiredMixture] = useState(desiredMixtureDefault())
+  const [currentMixture, setCurrentMixture] = useState<Grade>(currentMixtureDefault())
+  const [desiredMixture, setDesiredMixture] = useState<Grade>(desiredMixtureDefault())
   const [output, setOutput] = useState<any>()
 
-  const updateCurrent = (newPercentage: number, name: string) => {
+  const updateCurrentElement = (newPercentage: number, name: string) => {
     const newElements: MetalElement[] = currentMixture.elements.map(element => {
       if(element.name === name) return {name, percentage: newPercentage}
       return element
@@ -22,11 +22,9 @@ function App() {
       qualityNumber: currentMixture.qualityNumber,
       weight: currentMixture.weight
     })
-
-    
   }
 
-  const updateDesired = (newPercentage: number, name: string) => {
+  const updateDesiredElement = (newPercentage: number, name: string) => {
     const newElements: MetalElement[] = desiredMixture.elements.map(element => {
       if(element.name === name) return {name, percentage: newPercentage}
       return element
@@ -37,8 +35,20 @@ function App() {
       qualityNumber: desiredMixture.qualityNumber,
       weight: desiredMixture.weight
     })
+  }
 
-    
+  const updatePounds = (mixture: "current" | "desired", weight: number) => {
+      if(mixture === "current") {
+        setCurrentMixture({
+          ...currentMixture,
+          weight
+        })
+      } else{
+        setDesiredMixture({
+          ...desiredMixture,
+          weight
+        })
+      }
   }
 
   const runCalculation = () => {
@@ -49,8 +59,8 @@ function App() {
     <div>
       <h1>Steel Mixture Process</h1>
       <div className='element-container'>
-      <ElementTable grade={currentMixture} updatePercentage={updateCurrent}/>
-      <ElementTable grade={desiredMixture} updatePercentage={updateDesired}/>
+      <ElementTable grade={currentMixture} updatePercentage={updateCurrentElement} updateWeight={updatePounds}/>
+      <ElementTable grade={desiredMixture} updatePercentage={updateDesiredElement} updateWeight={updatePounds}/>
       </div>
       <div className='output-container'>
       <button onClick={runCalculation} className='btn btn-primary'>Calculate</button>

@@ -1,7 +1,7 @@
 import { Grade } from "./material-calculations"
 
 const desiredMixtureDefault = (): Grade => ({
-    name: "Desired Mixture",
+    name: "desired",
     qualityNumber: 316.55,
     weight: 2000,
     elements: [
@@ -47,7 +47,7 @@ const desiredMixtureDefault = (): Grade => ({
 })
 
 const currentMixtureDefault = (): Grade => ({
-name: "Current Mixture",
+name: "current",
 qualityNumber: 316.55,
 weight: 1000,
 elements: [
