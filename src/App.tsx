@@ -37,6 +37,16 @@ function App() {
     })
   }
 
+  const addElement = (mixture: "current" | "desired", element: MetalElement) => {
+    if(mixture == "current") return setCurrentMixture({...currentMixture, elements: [...currentMixture.elements, element]})
+    return setDesiredMixture({...desiredMixture, elements: [...desiredMixture.elements, element]})
+  }
+
+  const removeElement = (mixtrure: "current" | "desired", name: string) => {
+    if(mixtrure ==  "current") return setCurrentMixture({...currentMixture, elements: currentMixture.elements.filter(e => e.name !== name)})
+    return setDesiredMixture({...desiredMixture, elements: desiredMixture.elements.filter(e => e.name !== name)})
+  }
+
   const updatePounds = (mixture: "current" | "desired", weight: number) => {
       if(mixture === "current") {
         setCurrentMixture({
@@ -59,8 +69,8 @@ function App() {
     <div>
       <h1>Steel Mixture Process</h1>
       <div className='element-container'>
-      <ElementTable grade={currentMixture} updatePercentage={updateCurrentElement} updateWeight={updatePounds}/>
-      <ElementTable grade={desiredMixture} updatePercentage={updateDesiredElement} updateWeight={updatePounds}/>
+      <ElementTable grade={currentMixture} updatePercentage={updateCurrentElement} updateWeight={updatePounds} addElement={addElement} removeElement={removeElement}/>
+      <ElementTable grade={desiredMixture} updatePercentage={updateDesiredElement} updateWeight={updatePounds} addElement={addElement} removeElement={removeElement}/>
       </div>
       <div className='output-container'>
       <button onClick={runCalculation} className='btn btn-primary'>Calculate</button>

@@ -22,7 +22,7 @@ const OutputTable = ({output}: Props) => {
       {output.map(e => 
                 <tr>
                     <td>{e.name}</td>
-                    <td>{`${e.neededWeight} lbs`}</td>
+                    <td>{`${e.neededWeight.toFixed(2)} lbs`}</td>
                 </tr>)}
      
     </tbody>

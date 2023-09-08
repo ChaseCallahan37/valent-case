@@ -33,7 +33,7 @@ const materialAdditions = desiredGrade.elements.map(desiredElement => {
     }
 })
 const unmatchedElements = currentGrade.elements.filter(c => !desiredGrade.elements.map(e => e.name).includes(c.name))
-const unmatchedErrors = unmatchedElements.map(unmatched => ({error: `Current mixture contains ${unmatched.percentage * currentGrade.weight}lbs of ${unmatched.name} and is not needed. Solution Invalid`}))
+const unmatchedErrors = unmatchedElements.map(unmatched => ({error: `Current mixture contains ${(unmatched.percentage / 100) * currentGrade.weight}lbs of ${unmatched.name} and is not needed. Solution Invalid`}))
 
 return [...materialAdditions, ...unmatchedErrors]
 }

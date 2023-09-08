@@ -88,7 +88,7 @@ elements: [
     {
         name: "Iron",
         percentage: 65.49
-    }
+    },
 ]
 })
 
